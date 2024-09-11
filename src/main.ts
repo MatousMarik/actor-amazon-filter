@@ -17,9 +17,18 @@ const { datasetId } = await Actor.getInput<Input>() || {};
 if (datasetId == undefined) throw new Error("Invalid input.");
 const dataset = await Actor.openDataset(datasetId);
 
+console.log(dataset);
+
 // NOTE: How to do this elegantly in a single line
-let { items } = await dataset.getData();
-items = (items as Offer[]);
+const { items } = await dataset.getData();
+
+console.log("items:")
+console.log(items);
+
+const offerItems = (items as Offer[]);
+
+console.log("offerItems:")
+console.log(offerItems);
 
 const filteredItems = items.reduce((acc, curr) => {
     const { asin, price: priceString }  = (curr as Offer);
@@ -33,6 +42,7 @@ const filteredItems = items.reduce((acc, curr) => {
     return acc;
 }, {});
 
+console.log(filteredItems);
 await Actor.pushData(Object.values(filteredItems));
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
