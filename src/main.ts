@@ -1,6 +1,6 @@
 // Apify SDK - toolkit for building Apify Actors (Read more at https://docs.apify.com/sdk/js/)
 import { Actor } from 'apify';
-import { Input } from './types.js';
+import { Input, Offer } from './types.js';
 // Crawlee - web scraping and browser automation library (Read more at https://crawlee.dev)
 // import { CheerioCrawler } from 'crawlee';
 
@@ -17,10 +17,12 @@ const { datasetId } = await Actor.getInput<Input>() || {};
 if (datasetId == undefined) throw new Error("Invalid input.");
 const dataset = await Actor.openDataset(datasetId);
 
-const { items } = await dataset.getData();
+// NOTE: How to do this elegantly in a single line
+let { items } = await dataset.getData();
+items = (items as Offer[]);
 
 const filteredItems = items.reduce((acc, curr) => {
-    const { asin, priceString }  = curr;
+    const { asin, price: priceString }  = (curr as Offer);
 
     const price = +priceString;
 
@@ -32,7 +34,6 @@ const filteredItems = items.reduce((acc, curr) => {
 }, {});
 
 await Actor.pushData(Object.values(filteredItems));
-await Actor.pushData({test: "test"});
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
