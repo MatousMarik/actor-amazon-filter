@@ -17,5 +17,21 @@ const { datasetId } = await Actor.getInput<Input>() || {};
 if (datasetId == undefined) throw new Error("Invalid input.");
 const dataset = await Actor.openDataset(datasetId);
 
+const { items } = await dataset.getData();
+
+const filteredItems = items.reduce((acc, curr) => {
+    const { asin, priceString }  = curr;
+
+    const price = +priceString;
+
+    const cheapest = acc[asin] ? +acc[asin].price : Number.MIN_VALUE;
+    if (!acc[asin] || cheapest > price) {
+        acc[asin] = curr;
+    }
+    return acc;
+}, {});
+
+await Actor.pushData(Object.values(filteredItems));
+
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
