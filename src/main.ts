@@ -1,5 +1,6 @@
 // Apify SDK - toolkit for building Apify Actors (Read more at https://docs.apify.com/sdk/js/)
 import { Actor } from 'apify';
+import { Input } from './types.js';
 // Crawlee - web scraping and browser automation library (Read more at https://crawlee.dev)
 // import { CheerioCrawler } from 'crawlee';
 
@@ -11,10 +12,10 @@ import { Actor } from 'apify';
 // The init() call configures the Actor for its environment. It's recommended to start every Actor with an init()
 await Actor.init();
 
-console.log('Hello from the Actor!');
-/**
- * Actor code
- */
+const { datasetId } = await Actor.getInput<Input>() || {};
+
+if (datasetId == undefined) throw new Error("Invalid input.");
+const dataset = await Actor.openDataset(datasetId);
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
