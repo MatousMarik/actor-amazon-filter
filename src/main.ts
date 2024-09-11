@@ -32,6 +32,7 @@ const filteredItems = items.reduce((acc, curr) => {
 }, {});
 
 await Actor.pushData(Object.values(filteredItems));
+await Actor.pushData({test: "test"});
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
