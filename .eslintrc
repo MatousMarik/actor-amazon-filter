@@ -5,19 +5,16 @@
         "es2020": true,
         "node": true
     },
-    "extends": ["@apify/eslint-config-ts"],
-    "parser": "@typescript-eslint/parser",
-    // "plugins": ["@typescript-esling"],
+    "extends": [
+        "@apify/eslint-config-ts"
+    ],
     "parserOptions": {
-        "project": "./tsconfig.eslint.json",
+        "project": "./tsconfig.json",
         "ecmaVersion": 2020
     },
-    // "plugins": ["@typescript-eslint/recommended"],
-    "ignorePatterns": ["node_modules", "dist", "**/*.d.ts"],
-    "rules": {
-        "@typescript-eslint/no-explicit-any": "warn",
-        "@typescript-eslint/space-before-function-paren": "off",
-        "@typescript-eslint/comma-dangle": "off"
-        // "camelcase": "off"
-    }
+    "ignorePatterns": [
+        "node_modules",
+        "dist",
+        "**/*.d.ts"
+    ]
 }
