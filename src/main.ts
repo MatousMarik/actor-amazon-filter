@@ -22,11 +22,15 @@ let { items } = await dataset.getData();
 items = (items as Offer[]);
 
 const filteredItems = items.reduce((acc, curr) => {
+    // will throw away product with no offer with no valid price
     const { asin, price: priceString }  = (curr as Offer);
 
-    const price = +priceString;
+    if (priceString === "") return acc;
+    const price = +priceString.slice(1);
 
-    const cheapest = acc[asin] ? +acc[asin].price : Number.MIN_VALUE;
+    if (Number.isNaN(price)) return acc;
+
+    const cheapest = acc[asin] ? +acc[asin].price.slice(1) : Number.MAX_VALUE;
     if (!acc[asin] || cheapest > price) {
         acc[asin] = curr;
     }
