@@ -37,7 +37,7 @@ const filteredItems = items.reduce((acc, curr) => {
         acc.set(asin, curr);
     }
     return acc;
-}, {} as Map<string, Offer>);
+}, new Map<string, Offer>());
 
 await Actor.pushData(Object.values(filteredItems));
 
