@@ -21,9 +21,7 @@ const { datasetId } = await Actor.getInput<Input>() || {};
 if (datasetId == undefined) throw new Error("Invalid input.");
 const dataset = await Actor.openDataset(datasetId);
 
-const items = (await dataset.getData()).items as Offer[];
-
-const filteredItems = items.reduce((acc, curr) => {
+const filteredItems = await dataset.reduce((acc, curr) => {
     // will throw away product with no offer with no valid price
     const { asin, price: priceString }  = curr;
 
@@ -34,7 +32,7 @@ const filteredItems = items.reduce((acc, curr) => {
 
     const cheapest = acc.has(asin) ? +acc.get(asin)!.price.slice(1) : Number.MAX_VALUE;
     if (!acc.has(asin) || cheapest > price) {
-        acc.set(asin, curr);
+        acc.set(asin, curr as Offer);
     }
     return acc;
 }, new Map<string, Offer>());
