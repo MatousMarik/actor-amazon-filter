@@ -19,7 +19,7 @@ await Actor.init();
 const { datasetId } = await Actor.getInput<Input>() || {};
 
 if (datasetId == undefined) throw new Error("Invalid input.");
-const dataset = await Actor.openDataset(datasetId);
+const dataset = await Actor.openDataset(datasetId, { forceCloud: true });
 
 const filteredItems = await dataset.reduce((acc, curr) => {
     // will throw away product with no offer with no valid price
@@ -37,6 +37,6 @@ const filteredItems = await dataset.reduce((acc, curr) => {
     return acc;
 }, new Map<string, Offer>());
 
-await Actor.pushData(Object.values(filteredItems));
+await Actor.pushData(Array.from(filteredItems.values()));
 
 await Actor.exit();
